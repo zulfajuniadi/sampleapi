@@ -17,7 +17,7 @@ class ApiMiddleware
     public function handle($request, Closure $next)
     {
         if (!$request->wantsJson()) {
-            throw new Exception("API requests must have accept=application\json header", 1);
+            throw new Exception("API requests must have 'Accept: application/json' header", 1);
         }
 
         return $next($request);
