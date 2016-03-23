@@ -23,9 +23,15 @@
         .nav-tabs>li:nth-child(2) {
             display: none
         }
+        .postman-run-button {
+            vertical-align: middle;
+            margin-left: 11px;
+            margin-bottom: 6px;
+        }
     </style>
 </head>
 <body>
+    <a href="https://github.com/zulfajuniadi/sampleapi"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 1031;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
     <!-- Fixed navbar -->
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="container">
@@ -70,9 +76,24 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <h5>Api URL</h5>
-                <input id="apiUrl" type="text" class="form-control input-sm" value="http://sampleapi.demo.rocks">
+            <div class="col-md-12" style="position: relative;">
+                <h2>
+                    Api URL
+                    <div class="postman-run-button"
+                    data-postman-action="collection/import"
+                    data-postman-var-1="b24536e45727d1e82614"
+                    data-postman-param="env%5BSample%20API%20-%20Production%5D=W3sia2V5Ijoic2VydmVyIiwidmFsdWUiOiJodHRwczovL3NhbXBsZWFwaS5kZW1vLnJvY2tzL2FwaS92MSIsInR5cGUiOiJ0ZXh0IiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJ0b2tlbiIsInZhbHVlIjoiQmVhcmVyIGV5SjBlWEFpT2lKS1YxUWlMQ0poYkdjaU9pSklVekkxTmlKOS5leUp6ZFdJaU9qRXNJbWx6Y3lJNkltaDBkSEJ6T2x3dlhDOXpZVzF3YkdWaGNHa3VaR1Z0Ynk1eWIyTnJjMXd2WVhCcFhDOTJNVnd2WVhWMGFGd3ZiRzluYVc0aUxDSnBZWFFpT2pFME5UZzNORGMzTkRFc0ltVjRjQ0k2TVRRNU1ESTRNemMwTVN3aWJtSm1Jam94TkRVNE56UTNOelF4TENKcWRHa2lPaUl5T1RVek9HRmpNV015WVRCa056QXhZemM0TURCaE0ySTBZalZoTURFNU5pSjkuQ0N2dUY2bU43NnI1MDk3ZkpMdEY5bzFhRFhQcWtybDkxaEZFaEliSU5JNCIsInR5cGUiOiJ0ZXh0IiwiZW5hYmxlZCI6dHJ1ZX1d"></div>
+                    <script type="text/javascript">
+                      (function (p,o,s,t,m,a,n) {
+                        !p[s] && (p[s] = function () { (p[t] || (p[t] = [])).push(arguments); });
+                        !o.getElementById(s+t) && o.getElementsByTagName("head")[0].appendChild((
+                          (n = o.createElement("script")),
+                          (n.id = s+t), (n.async = 1), (n.src = m), n
+                        ));
+                      }(window, document, "_pm", "PostmanRunObject", "https://run.pstmn.io/button.js"));
+                    </script>
+                </h2>
+                <input id="apiUrl" type="text" class="form-control input-sm" value="https://sampleapi.demo.rocks">
             </div>
         </div>
         <hr>
