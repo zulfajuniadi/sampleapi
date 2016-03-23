@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        Commands\UpdateApiDocs::class,
         // Commands\Inspire::class,
     ];
 

@@ -19,7 +19,7 @@ return [
     | Don't forget to set this, as it will be used to sign your tokens.
     | A helper command is provided for this: `php artisan jwt:generate`
     |
-    */
+     */
 
     'secret' => env('JWT_SECRET', 'tMeUyr5NmmbXBU8yDwI6gIwibZxq1uxr'),
 
@@ -31,9 +31,9 @@ return [
     | Specify the length of time (in minutes) that the token will be valid for.
     | Defaults to 1 hour
     |
-    */
+     */
 
-    'ttl' => 60,
+    'ttl' => 60 * 24 * 365, // 1 year
 
     /*
     |--------------------------------------------------------------------------
@@ -45,7 +45,7 @@ return [
     | the original token being created until they must re-authenticate.
     | Defaults to 2 weeks
     |
-    */
+     */
 
     'refresh_ttl' => 20160,
 
@@ -59,7 +59,7 @@ return [
     | See here: https://github.com/namshi/jose/tree/2.2.0/src/Namshi/JOSE/Signer
     | for possible values
     |
-    */
+     */
 
     'algo' => 'HS256',
 
@@ -71,7 +71,7 @@ return [
     | Specify the full namespace to your User model.
     | e.g. 'Acme\Entities\User'
     |
-    */
+     */
 
     'user' => 'App\User',
 
@@ -83,7 +83,7 @@ return [
     | Specify a unique property of the user that will be added as the 'sub'
     | claim of the token payload.
     |
-    */
+     */
 
     'identifier' => 'id',
 
@@ -96,7 +96,7 @@ return [
     | A TokenInvalidException will be thrown if any of these claims are not
     | present in the payload.
     |
-    */
+     */
 
     'required_claims' => ['iss', 'iat', 'exp', 'nbf', 'sub', 'jti'],
 
@@ -108,7 +108,7 @@ return [
     | In order to invalidate tokens, you must have the the blacklist enabled.
     | If you do not want or need this functionality, then set this to false.
     |
-    */
+     */
 
     'blacklist_enabled' => env('JWT_BLACKLIST_ENABLED', true),
 
@@ -119,7 +119,7 @@ return [
     |
     | Specify the various providers used throughout the package.
     |
-    */
+     */
 
     'providers' => [
 
@@ -131,7 +131,7 @@ return [
         | Specify the provider that is used to find the user based
         | on the subject claim
         |
-        */
+         */
 
         'user' => 'Tymon\JWTAuth\Providers\User\EloquentUserAdapter',
 
@@ -142,7 +142,7 @@ return [
         |
         | Specify the provider that is used to create and decode the tokens.
         |
-        */
+         */
 
         'jwt' => 'Tymon\JWTAuth\Providers\JWT\NamshiAdapter',
 
@@ -153,7 +153,7 @@ return [
         |
         | Specify the provider that is used to authenticate users.
         |
-        */
+         */
 
         'auth' => 'Tymon\JWTAuth\Providers\Auth\IlluminateAuthAdapter',
 
@@ -164,7 +164,7 @@ return [
         |
         | Specify the provider that is used to store tokens in the blacklist
         |
-        */
+         */
 
         'storage' => 'Tymon\JWTAuth\Providers\Storage\IlluminateCacheAdapter',
 

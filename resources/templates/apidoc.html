@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="php-apidoc - apid documenation generator">
+    <meta name="author" content="Calin Rada">
+    <title>{{ title }}</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        body      { padding-top: 70px; margin-bottom: 15px; }
+        .tab-pane { padding-top: 10px; }
+        .mt0      { margin-top: 0px; }
+        .footer   { font-size: 12px; color: #666; }
+        .label    { display: inline-block; min-width: 65px; padding: 0.3em 0.6em 0.3em; }
+        .string   { color: green; }
+        .number   { color: darkorange; }
+        .boolean  { color: blue; }
+        .null     { color: magenta; }
+        .key      { color: red; }
+        .popover  { max-width: 400px; max-height: 400px; overflow-y: auto;}
+        .nav-tabs>li:nth-child(2) {
+            display: none
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">{{ title }}</a>
+        </div>
+        <div class="navbar-collapse collapse hidden">
+            <form class="navbar-form navbar-right">
+                <div class="form-group">
+                    Api key: <a href="javascript:void(0);" class="tooltipP" data-toggle="tooltip" title="Api key header with api key (key) and api key value (value) "><span class="glyphicon glyphicon-info-sign"></span></a>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control input-sm" placeholder="key" id="apikey_key">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control input-sm" placeholder="value" id="apikey_value">
+                </div>
+                <div class="form-group" style="margin-left: 10px;">
+                    Basic Auth: <a href="javascript:void(0);" class="tooltipP" data-toggle="tooltip" title="If needed"><span class="glyphicon glyphicon-info-sign"></span></a>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control input-sm" placeholder="Username" id="basic_auth_username">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control input-sm" placeholder="Password" id="basic_auth_password">
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-success btn-sm tooltipP" data-toggle="tooltip" title="Save API key and Basic Auth data in localstorage" id="save_auth_data">
+                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Api URL</h5>
+                <input id="apiUrl" type="text" class="form-control input-sm" value="http://sampleapi.demo.rocks">
+            </div>
+        </div>
+        <hr>
+        <div class="panel-group" id="accordion">
+            {{ content }}
+        </div>
+        <hr>
+
+        <div class="row mt0 footer">
+            <div class="col-md-6" align="left">
+                Generated on {{ date }}
+            </div>
+            <div class="col-md-6" align="right">
+                <a href="https://github.com/calinrada/php-apidoc" target="_blank">php-apidoc v {{ version }}</a>
+            </div>
+        </div>
+
+    </div> <!-- /container -->
+
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    function syntaxHighlight(json) {
+        if (typeof json != 'string') {
+            json = JSON.stringify(json, undefined, 2);
+        }
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+    }
+
+    var storage = (function() {
+        var uid = new Date;
+        var storage;
+        var result;
+        try {
+            (storage = window.localStorage).setItem(uid, uid);
+            result = storage.getItem(uid) == uid;
+            storage.removeItem(uid);
+            return result && storage;
+        } catch (exception) {}
+    }());
+
+    $.fn.serializeObject = function()
+    {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if(!this.value) {
+                return;
+            }
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+
+    $(document).ready(function() {
+
+        if (storage) {
+            $('#basic_auth_username').val(storage.getItem('basicAuthUsername'));
+            $('#basic_auth_password').val(storage.getItem('basicAuthPassword'));
+            $('#apikey_key').val(storage.getItem('apiKey'));
+            $('#apikey_value').val(storage.getItem('apiKeyValue'));
+        }
+
+        $('#php-apidoctab a').click(function(e) {
+            e.preventDefault()
+            $(this).tab('show')
+        });
+
+        $('.tooltipP').tooltip({
+            placement: 'bottom'
+        });
+
+        $('code[id^=response]').hide();
+
+        $.each($('pre[id^=sample_response],pre[id^=sample_post_body]'), function() {
+            if ($(this).html() == 'NA') {
+                return;
+            }
+            var str = JSON.stringify(JSON.parse($(this).html().replace(/'/g, '"')), undefined, 2);
+            $(this).html(syntaxHighlight(str));
+        });
+
+        $("[data-toggle=popover]").popover({placement:'right'});
+
+        $('body').on('shown.bs.popover', function() {
+            var $sample = $(this).find(".popover-content");
+            if ($sample.html() == 'NA') {
+                return;
+            }
+            var str = JSON.stringify(JSON.parse($sample.html().replace(/'/g, '"')), undefined, 2);
+            $sample.html('<pre>' + syntaxHighlight(str) + '</pre>');
+        });
+
+        $('body').on('click', '#save_auth_data', function(e) {
+            if (storage) {
+                storage.setItem('basicAuthUsername', $('#basic_auth_username').val());
+                storage.setItem('basicAuthPassword', $('#basic_auth_password').val());
+                storage.setItem('apiKey', $('#apikey_key').val());
+                storage.setItem('apiKeyValue', $('#apikey_value').val());
+            } else {
+                alert('Your browser does not support local storage');
+            }
+        });
+
+        $('body').on('click', '.send', function(e) {
+            e.preventDefault();
+            var form = $(this).closest('form');
+            //added /g to get all the matched params instead of only first
+            var matchedParamsInRoute = $(form).attr('action').match(/[^{]+(?=\})/g);
+            var theId = $(this).attr('rel');
+            //keep a copy of action attribute in order to modify the copy
+            //instead of the initial attribute
+            var url = $(form).attr('action');
+
+            //get form serialized data in order to remove matchedParams
+            var serializedData = $(form).serializeObject();
+
+            var index, key, value;
+
+            if(matchedParamsInRoute) {
+                for (index = 0; index < matchedParamsInRoute.length; ++index) {
+                    try {
+                        key = matchedParamsInRoute[index];
+                        value = serializedData[key];
+                        if (typeof value == "undefined") value ="";
+                        url = url.replace("{" + key + "}", value);
+                        delete serializedData[key];
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
+            }
+
+            var st_headers = {};
+
+            var basicAuthUsername = $('#basic_auth_username').val();
+            var basicAuthPassword = $('#basic_auth_password').val();
+            var apiKey = $('#apikey_key').val();
+            var apiKeyValue = $('#apikey_value').val();
+
+            if(apiKey.length > 0 && apiKeyValue.length > 0) {
+                st_headers[apiKey] = apiKeyValue;
+            }
+
+            if (basicAuthUsername != '' && basicAuthPassword != '') {
+                st_headers['Authorization'] = "Basic " + btoa(basicAuthUsername + ":" + basicAuthPassword);
+            }
+
+            $("#sandbox" + theId + " .headers input[type=text]").each(function() {
+                val = $(this).val();
+                if(val.length > 0) {
+                    st_headers[$(this).prop('name')] = val;
+                }
+            });
+
+            $.ajax({
+                url: $('#apiUrl').val() + url,
+                data: serializedData,
+                type: $(form).attr('method') + '',
+                dataType: 'json',
+                headers: st_headers,
+                success: function(data, textStatus, xhr) {
+                    if (typeof data === 'object') {
+                        var str = JSON.stringify(data, null, 2);
+                        $('#response' + theId).html(syntaxHighlight(str));
+                    } else {
+                        $('#response' + theId).html(data);
+                    }
+                    $('#response_headers' + theId).html('HTTP ' + xhr.status + ' ' + xhr.statusText + '<br/><br/>' + xhr.getAllResponseHeaders());
+                    $('#response' + theId).show();
+                },
+                error: function(xhr, textStatus, error) {
+                    var str = JSON.stringify($.parseJSON(xhr.responseText), null, 2);
+                    $('#response_headers' + theId).html('HTTP ' + xhr.status + ' ' + xhr.statusText + '<br/><br/>' + xhr.getAllResponseHeaders());
+                    $('#response' + theId).html(syntaxHighlight(str));
+                    $('#response' + theId).show();
+
+                }
+            });
+            return false;
+        });
+    });
+    </script>
+</body>
+</html>
